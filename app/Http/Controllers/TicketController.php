@@ -32,7 +32,7 @@ class TicketController extends Controller
         
         ]);
         
-        return redirect()->route('tickets.index');
+        return redirect()->route('tickets.create');
     }
 
     public function create()
