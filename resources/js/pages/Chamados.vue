@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Ticket } from 'lucide-vue-next'
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
+import { computed } from 'vue'
 
 interface TicketType {
   id: number
@@ -9,13 +10,21 @@ interface TicketType {
   status: string
 }
 
+
+
+const page = usePage();
+const userRole = computed(() => (page.props as any).auth?.user?.role ?? null);
+const isUser = computed(() => userRole.value === 'user');
+const isAdmin = computed(() => userRole.value === 'admin')
+
 defineProps<{
   tickets: TicketType[]
 }>()
 </script>
 
 <template>
-  <main class="bg-slate-50 min-h-screen w-full p-8">
+  <main class="bg-slate-50 min-h-screen w-full p-8" >
+    <div class="max-w-4xl mx-auto space-y-6" v-if="isAdmin">
     <div class="max-w-4xl mx-auto space-y-6">
         
           <div
@@ -38,11 +47,11 @@ defineProps<{
                 
                     Status: <span class="text-green-600 font-semibold" v-if="ticket.status === 'aberto'  ">Aberto</span>
                     <span class="text-red-600 font-semibold" v-else-if="ticket.status === 'fechado'">Fechado</span>
-                    <span class="text-yellow-600 font-semibold" v-else-if="ticket.status === 'em_andamento'">Em Andamento</span>
+                    <span class="text-yellow-600 font-semibold" v-else-if="ticket.status === 'em andamento'">Em análise</span>
                 </p>
             </div>
 
-            <div class="flex gap-2 items-center">
+            <div class="flex gap-2 items-center" v-if="isAdmin">
 
                 <Link
                   :href="`/tickets/${ticket.id}/edit`"
@@ -53,7 +62,7 @@ defineProps<{
 
                 <Link
                   :href="`/tickets/${ticket.id}/delete`" method="delete"  
-                  class="flex items-center justify-center bg-red-500 px-4 py-2 rounded hover:bg-red-600 text-white font-semibold transition"
+                  class="flex items-center justify-center bg-red-500 px-4 py-2 rounded hover:bg-red-600 text-white font-semibold transition cursor-pointer"
                 >
                   EXCLUIR
               </Link>

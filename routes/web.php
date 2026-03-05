@@ -11,16 +11,17 @@ Route::inertia('/', 'Welcome', [
 Route::middleware(['auth', 'verified'])->group(function () {
     
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
-
+    Route::post('/tickets/store', [TicketController::class, 'store'])->name('tickets.store');
+    Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
+    Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
 });
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
 
-    Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
-    Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
-    Route::post('/tickets/store', [TicketController::class, 'store'])->name('tickets.store');
-
+    
+    
+   
     Route::get('tickets/{ticket}/edit', [TicketController::class, 'edit'] )->name('tickets.edit');
     Route::put('tickets/{ticket}', [TicketController::class, 'update' ])->name('tickets.update');
 
