@@ -39,4 +39,35 @@ class TicketController extends Controller
     {
         return Inertia::render("tickets/CriarTickets");
     }
+
+    public function edit(Ticket $ticket){
+
+        return Inertia::render("EditarChamados", [
+            'ticket' => $ticket
+        ]);
+    }
+
+    public function update( Request $request, Ticket $ticket){
+
+
+        $request->validate([
+            'titulo'=>  'required',
+            'descricao'=> 'required',
+            'status' => 'required'
+            
+        ]);
+
+        $ticket->update([
+            'titulo' => $request->titulo,
+            'descricao' => $request ->descricao,
+            'status' => $request->status,
+        ]);
+
+        return redirect()->route('tickets.index');
+    }
+    public function destroy(Ticket $ticket)
+    {
+        $ticket->delete();
+        return redirect()->route('tickets.index');
+    }
 }
